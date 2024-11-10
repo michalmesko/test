@@ -1,0 +1,16 @@
+import streamlit as st
+import pandas as pd
+
+st.title('Pridanie URL stĺpca do Excel súboru')
+
+uploaded_file = st.file_uploader("Nahraj Excel súbor", type=["xlsx"])
+if uploaded_file is not None:
+    df = pd.read_excel(uploaded_file)
+    df['URL'] = df['ID'].apply(lambda x: f'www.nieco.com/{x}')
+    st.write("Upravené dáta:")
+    st.dataframe(df)
+    
+    output_file = 'upraveny_subor.xlsx'
+    df.to_excel(output_file, index=False)
+    with open(output_file, 'rb') as f:
+        st.download_button('Stiahnuť upravený súbor', f, file_name='upraveny_subor.xlsx')
